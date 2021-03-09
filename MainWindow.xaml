@@ -1,0 +1,40 @@
+﻿<Window x:Class="ImageDownloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageDownloader"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <Label x:Name="lblUrl" Content="Url" />
+            <TextBox x:Name="txbUrl" Text="" />
+            <Button x:Name="btnDownload" Content="Download" />
+            <Button x:Name="btnSettings" Content="Settings" />
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" Grid.Column="1" x:Name="dgImages" />
+
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="btnCopy" Content="Copy" />
+            <Button x:Name="btnMove" Content="Move" />
+        </StackPanel>
+
+        <StatusBar x:Name="stbStatus" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" />
+
+    </Grid>
+   
+</Window>
