@@ -35,15 +35,18 @@ namespace ImageDownloader
             
 
             //Check Directory or create Directory
-            CheckOrCreateDirectory(directoryToCeckOrCreate);
+            Task checkDirectoryTask = CheckOrCreateDirectory(directoryToCeckOrCreate);
 
 
             //Parse Url to html string
             string parsedHtml = await ParseUrlToHtml(urlToDownload);
-            if(parsedHtml!=string.Empty)
+
+            await checkDirectoryTask;
+
+            if (parsedHtml!=string.Empty)
             {
                 //Create list of image tags/elements from html
-                List<ImageElement> imageList = GetAllImageElementsFromHtml(parsedHtml, urlToDownload, directoryToCeckOrCreate);
+                List<ImageElement> imageList = await GetAllImageElementsFromHtml(parsedHtml, urlToDownload, directoryToCeckOrCreate);
                 if(imageList.Count!=0)
                 {
                     //Download images
@@ -58,7 +61,7 @@ namespace ImageDownloader
 
 
 
-        public void CheckOrCreateDirectory(string directoryToCeckOrCreate)
+        public async Task CheckOrCreateDirectory(string directoryToCeckOrCreate)
         {
             try
             {
@@ -86,7 +89,7 @@ namespace ImageDownloader
         }
 
 
-        public List<ImageElement> GetAllImageElementsFromHtml(string parsedHtml, string urlToDownload, string targetDirectory)
+        public async Task<List<ImageElement>> GetAllImageElementsFromHtml(string parsedHtml, string urlToDownload, string targetDirectory)
         {
             List<ImageElement> imageElements = new List<ImageElement>();
             try
@@ -144,19 +147,16 @@ namespace ImageDownloader
 
 
 
-        public void DownloadImages(List<ImageElement> imageElements)
+        public async Task DownloadImages(List<ImageElement> imageElements)
         {
             foreach (ImageElement imageElement in imageElements)
             {
-
-
-                DownloadImage(imageElement);
-
+               await  DownloadImage(imageElement);
             }
         }
 
 
-        private void DownloadImage(ImageElement imageElement)
+        private async Task DownloadImage(ImageElement imageElement)
         {
 
             WebClient webClient = new WebClient();
@@ -164,6 +164,23 @@ namespace ImageDownloader
             webClient.DownloadFileAsync(imageUri, imageElement.Path);
 
         }
+
+
+        public List<ImageElement> GetImagesFromDirectory(string targetDirectory)
+        {
+            List<ImageElement> imageElements = new List<ImageElement>();
+            var files = Directory.GetFiles(targetDirectory).ToList();
+            foreach (var image in files)
+            {
+                ImageElement element = new ImageElement();
+                element.Path = image;
+                imageElements.Add(element);
+            }
+
+
+            return imageElements;
+        }
+
 
 
 

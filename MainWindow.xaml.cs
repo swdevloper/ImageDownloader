@@ -49,7 +49,7 @@ namespace ImageDownloader
 
         }
 
-        private void btnDownload_Click(object sender, RoutedEventArgs e)
+        private async void btnDownload_Click(object sender, RoutedEventArgs e)
         {
             //URL: https://www.vlbg.wifi.at:443/Images/bild.jpg
             //URL: https://www.vlbg.wifi.at:443/
@@ -73,7 +73,11 @@ namespace ImageDownloader
                 downloadManager.DownloadError += DownloadManager_DownloadError;
                 
 
-                downloadManager.StartDownload(url, downloadDirectoryFullname);
+                await downloadManager.StartDownload(url, downloadDirectoryFullname);
+
+                List<ImageElement> imageList = downloadManager.GetImagesFromDirectory(downloadDirectoryFullname);
+                this.dgImages.ItemsSource = imageList;
+
 
             }
             this.Cursor = Cursors.Arrow;
