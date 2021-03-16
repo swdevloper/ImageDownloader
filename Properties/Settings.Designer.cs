@@ -26,9 +26,9 @@ namespace ImageDownloader.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\ProjekteData\\SWD_SoftwareDeveloper2020\\Swd.ImageDownloader")]
-        public string DownloadDirectory {
+        public string RootDirectoryDownload {
             get {
-                return ((string)(this["DownloadDirectory"]));
+                return ((string)(this["RootDirectoryDownload"]));
             }
         }
     }

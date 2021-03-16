@@ -57,9 +57,11 @@ namespace ImageDownloader
             //Regular Expressions
 
             string url = this.txbUrl.Text;
+            string rootDirectoryDownload = Properties.Settings.Default.RootDirectoryDownload;
+            string downloadDirectory = string.Format("{0:0000}{1:00}{2:00}{3:00}{4:00}{5:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            string downloadDirectoryFullname = System.IO.Path.Combine(rootDirectoryDownload, downloadDirectory);
 
-
-            // TODO Eingabe auf gülite URL prüfen
+            // TODO Eingabe auf gültige URL prüfen
             if (url!=string.Empty)
             {
                 this.Cursor = Cursors.Wait;
@@ -70,7 +72,8 @@ namespace ImageDownloader
                 downloadManager.DownloadFinished += DownloadManager_DownloadFinished;
                 downloadManager.DownloadError += DownloadManager_DownloadError;
                 
-                downloadManager.StartDownload(url);
+
+                downloadManager.StartDownload(url, downloadDirectoryFullname);
 
             }
             this.Cursor = Cursors.Arrow;

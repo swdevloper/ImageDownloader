@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="DownloadEventArgs.cs" />
     <Compile Include="DownloadManager.cs" />
+    <Compile Include="ImageElement.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
