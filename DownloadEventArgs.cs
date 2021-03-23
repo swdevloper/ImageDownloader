@@ -30,6 +30,23 @@ namespace ImageDownloader
     }
 
 
+    public class DownloadFinishedEventArgs : DownloadEventArgs
+    {
+        private List<ImageElement> _imageList;
+
+        public List<ImageElement> ImageList
+        {
+            get { return _imageList; }
+        }
+
+        public DownloadFinishedEventArgs(string downloadSource, string downloadTarget, List<ImageElement> imageList) : base(downloadSource, downloadTarget)
+        {
+            _imageList = imageList;
+        }
+
+    }
+
+
     public class DownloadEventErrorArgs: DownloadEventArgs
     {
         private Exception _exception;

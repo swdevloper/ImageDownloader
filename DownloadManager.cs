@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 
 namespace ImageDownloader
 {
@@ -20,7 +21,7 @@ namespace ImageDownloader
 
         //Events
         public event EventHandler<DownloadEventArgs> DownloadStarted;
-        public event EventHandler<DownloadEventArgs> DownloadFinished;
+        public event EventHandler<DownloadFinishedEventArgs> DownloadFinished;
         public event EventHandler<DownloadEventErrorArgs> DownloadError;
 
         public DownloadManager()
@@ -32,7 +33,8 @@ namespace ImageDownloader
         public async Task StartDownload(string urlToDownload, string directoryToCeckOrCreate)
         {
             OnDownloadStarted(new DownloadEventArgs(string.Empty, string.Empty));
-            
+
+            List<ImageElement> imageList = new List<ImageElement>();
 
             //Check Directory or create Directory
             Task checkDirectoryTask = CheckOrCreateDirectory(directoryToCeckOrCreate);
@@ -46,7 +48,7 @@ namespace ImageDownloader
             if (parsedHtml!=string.Empty)
             {
                 //Create list of image tags/elements from html
-                List<ImageElement> imageList = await GetAllImageElementsFromHtml(parsedHtml, urlToDownload, directoryToCeckOrCreate);
+                imageList = await GetAllImageElementsFromHtml(parsedHtml, urlToDownload, directoryToCeckOrCreate);
                 if(imageList.Count!=0)
                 {
                     //Download images
@@ -55,7 +57,7 @@ namespace ImageDownloader
             }
 
 
-            OnDownloadFinished(new DownloadEventArgs(string.Empty, string.Empty));
+            OnDownloadFinished(new DownloadFinishedEventArgs(string.Empty, string.Empty, imageList));
         }
 
 
@@ -165,6 +167,27 @@ namespace ImageDownloader
 
         }
 
+        
+        
+        
+        internal void CopyImages(List<ImageElement> selectedItems, string destinationDirectory)
+        {
+            foreach (ImageElement item in selectedItems)
+            {
+                string destinationFilename = Path.Combine(destinationDirectory, Path.GetFileName(item.Path));
+                CopyImages(item.Path, destinationFilename);
+            }
+        }
+
+        private void CopyImages(string sourceFilename, string destinationFilename)
+        {
+            if(File.Exists(destinationFilename))
+            {
+                File.Delete(destinationFilename); 
+            }
+            File.Copy(sourceFilename, destinationFilename);
+        }
+
 
         public List<ImageElement> GetImagesFromDirectory(string targetDirectory)
         {
@@ -188,9 +211,9 @@ namespace ImageDownloader
         {
             DownloadStarted?.Invoke(this, e);
         }
-        protected virtual void OnDownloadFinished(DownloadEventArgs e)
+        protected virtual void OnDownloadFinished(DownloadFinishedEventArgs e)
         {
-            DownloadFinished?.Invoke(this, e);
+          DownloadFinished?.Invoke(this, e);
         }
         protected virtual void OnDownloadError(DownloadEventErrorArgs e)
         {

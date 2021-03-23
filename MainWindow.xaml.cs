@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -36,7 +38,7 @@ namespace ImageDownloader
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-         
+            this.txbDestinationDirectory.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             //for (int i = 0; i < 5; i++)
             //{
@@ -45,7 +47,7 @@ namespace ImageDownloader
             //    btn.Click += Btn_Click;
             //    this.panCopyMove.Children.Add(btn);
             //}
-            
+
 
         }
 
@@ -64,7 +66,7 @@ namespace ImageDownloader
             // TODO Eingabe auf gültige URL prüfen
             if (url!=string.Empty)
             {
-                this.Cursor = Cursors.Wait;
+                this.Cursor = System.Windows.Input.Cursors.Wait;
                 this.dgImages.ItemsSource = null;
                 this.dgImages.Items.Clear();
                 DownloadManager downloadManager = new DownloadManager();
@@ -75,12 +77,12 @@ namespace ImageDownloader
 
                 await downloadManager.StartDownload(url, downloadDirectoryFullname);
 
-                List<ImageElement> imageList = downloadManager.GetImagesFromDirectory(downloadDirectoryFullname);
-                this.dgImages.ItemsSource = imageList;
+                //List<ImageElement> imageList = downloadManager.GetImagesFromDirectory(downloadDirectoryFullname);
+                //this.dgImages.ItemsSource = imageList;
 
 
             }
-            this.Cursor = Cursors.Arrow;
+            this.Cursor = System.Windows.Input.Cursors.Arrow;
 
 
         }
@@ -90,14 +92,76 @@ namespace ImageDownloader
             
         }
 
-        private void DownloadManager_DownloadFinished(object sender, DownloadEventArgs e)
+        private void DownloadManager_DownloadFinished(object sender, DownloadFinishedEventArgs e)
         {
-            MessageBox.Show("Download finished");
+            this.dgImages.ItemsSource = e.ImageList;
         }
 
         private void DownloadManager_DownloadStarted(object sender, DownloadEventArgs e)
         {
             
+        }
+
+        private void chkSelectDeselct_Checked(object sender, RoutedEventArgs e)
+        {
+            var itemList = (List<ImageElement>)this.dgImages.ItemsSource;
+            if(itemList!=null)
+            {
+                foreach (var item in itemList)
+                {
+                    item.IsSelected = true;
+                }
+                this.dgImages.Items.Refresh();
+            }
+        }
+
+        private void chkSelectDeselct_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var itemList = (List<ImageElement>)this.dgImages.ItemsSource;
+            if (itemList != null)
+            {
+                foreach (var item in itemList)
+                {
+                    item.IsSelected = false;
+                }
+                this.dgImages.Items.Refresh();
+            }
+        }
+
+        private void btnSelectDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            //Alter Dialog
+            //var dialog = new FolderBrowserDialog();
+            //DialogResult result = dialog.ShowDialog();
+            //if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
+            //{
+            //    this.txbDestinationDirectory.Text = dialog.SelectedPath;
+            //}
+
+            using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
+            {
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                dialog.EnsurePathExists = true;
+                dialog.IsFolderPicker = true;
+                if(dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    this.txbDestinationDirectory.Text = dialog.FileName;
+                }
+
+
+            }
+            
+
+        }
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            List<ImageElement> selectedItems = ((List<ImageElement>)this.dgImages.ItemsSource).Where(img => img.IsSelected == true).ToList();
+            if (selectedItems.Count > 0)
+            {
+                DownloadManager manager = new DownloadManager();
+                manager.CopyImages(selectedItems, this.txbDestinationDirectory.Text);
+            }
         }
 
         //private void Btn_Click(object sender, RoutedEventArgs e)

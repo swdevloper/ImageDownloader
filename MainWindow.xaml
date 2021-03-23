@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageDownloader"
         mc:Ignorable="d"
-        Title="ImageDownloader" Height="500" Width="800" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"  >
+        Title="ImageDownloader" Height="500" Width="900" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded"  >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -21,15 +21,34 @@
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0 10" >
             <Label x:Name="lblUrl" Content="Url" VerticalAlignment="Center" Padding="3"/>
-            <TextBox x:Name="txbUrl" Text="" MinWidth="300" VerticalAlignment="Center" Padding="3"/>
+            <TextBox x:Name="txbUrl"  MinWidth="300" VerticalAlignment="Center" Padding="3" Text="https://www.spiegel.de"  />
             <Button x:Name="btnDownload" Content="Dowload" MinWidth="{DynamicResource minWidthButton}" Margin="5 0" Click="btnDownload_Click" />
             <Button x:Name="btnSettings" Content="Settings"  MinWidth="{DynamicResource minWidthButton}" Margin="5 0" />
         </StackPanel>
 
-        <DataGrid Grid.Row="1" Grid.Column="1" x:Name="dgImages" RenderTransformOrigin="0.527,0.522" />
+        <ListBox Grid.Row="1" Grid.Column="1" x:Name="dgImages" RenderTransformOrigin="0.527,0.522" >
+            <ListBox.ItemTemplate>
+                <DataTemplate x:Name="ImageElementDataTempate" DataType="local:ImageElement">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox x:Name="chkSelect" VerticalAlignment="Center" IsChecked="{Binding IsSelected}" Margin="5" />
+                        <Image Width="150" x:Name="imgPreview" VerticalAlignment="Center" Source="{Binding Path}" Margin="5" />
+                        <StackPanel Margin="5">
+                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock Text="{Binding ImageType}" />
+                            <TextBlock Text="{Binding Path}" />
+                        </StackPanel>
+                        
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
 
         <StackPanel x:Name="panCopyMove" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0 10">
-            <Button x:Name="btnCopy" Content="Copy" MinWidth="{DynamicResource minWidthButton}" Margin="5 0"/>
+            <CheckBox x:Name="chkSelectDeselct" IsChecked="True"  Content="Alle auswählen" VerticalAlignment="Center" Checked="chkSelectDeselct_Checked" Unchecked="chkSelectDeselct_Unchecked" />
+            <TextBox x:Name="txbDestinationDirectory" MinWidth="300"  Margin="5 0" VerticalContentAlignment="Center"/>
+            <Button x:Name="btnSelectDirectory" Content="Select directory" MinWidth="{DynamicResource minWidthButton}" Margin="5 0" Click="btnSelectDirectory_Click"/>
+            <Button x:Name="btnCopy" Content="Copy" MinWidth="{DynamicResource minWidthButton}" Margin="5 0" Click="btnCopy_Click"/>
             <Button x:Name="btnMove" Content="Move" MinWidth="{DynamicResource minWidthButton}" Margin="5 0"/>
         </StackPanel>
 
