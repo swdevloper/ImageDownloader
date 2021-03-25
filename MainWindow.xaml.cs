@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using ImageDownloader.ViewModel;
+using log4net;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,11 @@ namespace ImageDownloader
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.txbDestinationDirectory.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //this.txbDestinationDirectory.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //this.txbDestinationDirectory.Text = Properties.Settings.Default.CopyDirectory;
+            this.DataContext = new SettingsViewModel();
+
+
 
             //for (int i = 0; i < 5; i++)
             //{
@@ -162,6 +167,21 @@ namespace ImageDownloader
                 DownloadManager manager = new DownloadManager();
                 manager.CopyImages(selectedItems, this.txbDestinationDirectory.Text);
             }
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            //Variante 2: Mit Constructor
+            //fSettings f = new fSettings();
+            fSettings f = new fSettings(this);
+
+            f.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //f.Owner = this;
+            //Variante 1: Mit Property
+            //f.CallerWindow = this;
+
+            f.Show();
+            this.Hide();
         }
 
         //private void Btn_Click(object sender, RoutedEventArgs e)

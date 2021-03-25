@@ -8,5 +8,14 @@
 
         <System:Double x:Key="minWidthButton">120</System:Double>
 
+        <ResourceDictionary x:Key="resDefault">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/defaultStyle.xaml" />
+
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+
     </Application.Resources>
 </Application>

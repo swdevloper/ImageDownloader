@@ -31,5 +31,29 @@ namespace ImageDownloader.Properties {
                 return ((string)(this["RootDirectoryDownload"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\ProjekteData\\SWD_SoftwareDeveloper2020\\Swd.ImageDownloader")]
+        public string DownloadDirectory {
+            get {
+                return ((string)(this["DownloadDirectory"]));
+            }
+            set {
+                this["DownloadDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\_Temp\\Testordner")]
+        public string CopyDirectory {
+            get {
+                return ((string)(this["CopyDirectory"]));
+            }
+            set {
+                this["CopyDirectory"] = value;
+            }
+        }
     }
 }

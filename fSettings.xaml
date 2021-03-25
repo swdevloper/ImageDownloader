@@ -1,0 +1,44 @@
+﻿<Window x:Class="ImageDownloader.fSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageDownloader"
+        mc:Ignorable="d"
+        Title="fSettings" Height="400" Width="700" Closed="Window_Closed" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        
+        <Label Grid.Row="0" Content="Settings" FontSize="20" FontWeight="Bold" />
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15*" />
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="15*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Download Folder" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Model.DownloadDirectory}" />
+            
+            <Label Grid.Row="1" Grid.Column="0" Content="Copy Folder" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.CopyDirectory}" />
+            
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnCancel" Content="Cancel" />
+            <Button x:Name="btnSave" Content="Save" Click="btnSave_Click" />
+        </StackPanel>
+        
+    </Grid>
+</Window>
